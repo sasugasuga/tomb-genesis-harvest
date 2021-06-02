@@ -1,6 +1,6 @@
 # tomb-genesis-harvest
 
-scans LP pools, harvests rewards every 10sec<br>
+scans LP pools, harvests rewards every 60sec<br>
 needs node.js and ethers.js, log-timestamp library:<br>
 npm install --save ethers<br>
 npm install log-timestamp<br>
