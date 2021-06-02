@@ -115,11 +115,14 @@ async function scanPools(contract=BooLpContract, pools=0, token=BooTokenName) {
 
 async function claimLpReward(contract=BooLpContract, _pid=NaN, _amount=0, token=BooTokenName) {
 	if (_pid != NaN & _amount != NaN) {
-		const harvestBal = 0;
+		var harvestBal = 0;
 		// add pending single stake BOO to withdraw amt to be harvested
 		if (token == 'BOO' & _pid==0) {
-			const harvestBal = await contract.pendingBOO(0, myWallet);
+			harvestBal = await contract.pendingBOO(0, myWallet);
+		} else if (token == 'TOMB') {
+			harvestBal = await pendingBal(contract, _pid, myWallet, token);
 		}
+		await sleep(2000);
 		const subTotal = await _amount + harvestBal;
 		await contract.withdraw(_pid, subTotal, options);
 		subTotalStr = ethers.utils.formatUnits(subTotal,18);
