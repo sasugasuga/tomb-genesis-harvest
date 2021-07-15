@@ -57,16 +57,19 @@ async function ClaimAndDeposit(status=[false,false]) {
 		const anyRewards = await pendingTOMB.gt(0);
 		if (status[0]) {
 			console.log("can claim from masonry: "+await ethers.utils.formatUnits(pendingTOMB,18)+" TOMB");
+			await MasonryContract.claimReward();
+			await sleep(3000);
+			console.log(">> claimed: "+await ethers.utils.formatUnits(pendingTOMB,18)+" TOMB" );
 		}
 		// check rewards claimable and any exists
-		// if (status[0] && anyRewards) {
-		if (status[0]) {
+		if (status[0] || anyRewards) {
+		// if (status[0]) {
 			const walBal = await ShareTokenContract.balanceOf(myWallet);
 			var depAmt = await ethers.BigNumber.from(walBal);
 			if (depAmt.gte(minAmount) ) {
-				await MasonryContract.claimReward();
-				await sleep(3000);
-				console.log(">> claimed: "+await ethers.utils.formatUnits(pendingTOMB,18)+" TOMB" );
+				// await MasonryContract.claimReward();
+				// await sleep(3000);
+				// console.log(">> claimed: "+await ethers.utils.formatUnits(pendingTOMB,18)+" TOMB" );
 				depAmt = await depAmt.sub( depAmt.mod(1e14) ); 	// zero 5th decimal place and beyond
 				// console.log("depositing: "+ await ethers.utils.formatUnits(depAmt,18) +" TSHARE...");
 				await MasonryContract.stake(depAmt);
