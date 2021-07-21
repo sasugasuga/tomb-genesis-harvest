@@ -10,3 +10,5 @@ save your private key as an environment variable $PEENS
 
 added wait+countdown function to auto-remove TOMB-FTM LPs from current TOMB earn pool and deposit in TSHARE earn pool when live.
 tomb.js (genesis pools) no longer active, use test.js for claiming TOMB-FTM and TSHARE-FTM LP pools and claim+stake in masonry
+<br>
+updated test.js to buy/redeem TBOND at < 1 TWAP and >= 1.1 TWAP
