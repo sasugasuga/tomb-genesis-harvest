@@ -47,6 +47,12 @@ const BondTokenAbi = [{"inputs":[],"stateMutability":"nonpayable","type":"constr
 const BondTokenContract = new ethers.Contract('0x24248CD1747348bDC971a5395f4b3cd7feE94ea0', BondTokenAbi, provider);
 
 
+// SBS swapper
+const SbsAddress = '0x2942168Fa8A39d070cB1173a54479F7C6A94604d';
+const SbsAbi = [{"inputs":[{"internalType":"address","name":"_tomb","type":"address"},{"internalType":"address","name":"_tbond","type":"address"},{"internalType":"address","name":"_tshare","type":"address"},{"internalType":"address","name":"_wftmAddress","type":"address"},{"internalType":"address","name":"_tombSpookyLpPair","type":"address"},{"internalType":"address","name":"_tshareSpookyLpPair","type":"address"},{"internalType":"address","name":"_daoAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOperator","type":"address"},{"indexed":true,"internalType":"address","name":"newOperator","type":"address"}],"name":"OperatorTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"tbondAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"tshareAmount","type":"uint256"}],"name":"TBondSwapPerformed","type":"event"},{"inputs":[],"name":"daoAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_tbondAmount","type":"uint256"}],"name":"estimateAmountOfTShare","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getTBondBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTShareAmountPerTomb","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTShareBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTSharePrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTombPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isOperator","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"operator","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_tbondAmount","type":"uint256"}],"name":"swapTBondToTShare","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"tbond","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tomb","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tombSpookyLpPair","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOperator_","type":"address"}],"name":"transferOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"tshare","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tshareSpookyLpPair","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"wftmAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdrawTShare","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+const SbsContract = new ethers.Contract(SbsAddress, SbsAbi, signer);
+
+
 // Masonry
 const MasonryAddress = '0x8764DE60236C5843D9faEB1B638fbCE962773B67';
 const MasonryAbi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"executor","type":"address"},{"indexed":false,"internalType":"uint256","name":"at","type":"uint256"}],"name":"Initialized","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"RewardAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"RewardPaid","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrawn","type":"event"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"allocateSeigniorage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"mason","type":"address"}],"name":"canClaimReward","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"mason","type":"address"}],"name":"canWithdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"mason","type":"address"}],"name":"earned","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"epoch","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"exit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"mason","type":"address"}],"name":"getLastSnapshotIndexOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTombPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract IERC20","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_to","type":"address"}],"name":"governanceRecoverUnsupported","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IERC20","name":"_tomb","type":"address"},{"internalType":"contract IERC20","name":"_share","type":"address"},{"internalType":"contract ITreasury","name":"_treasury","type":"address"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"initialized","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"latestSnapshotIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"masonryHistory","outputs":[{"internalType":"uint256","name":"time","type":"uint256"},{"internalType":"uint256","name":"rewardReceived","type":"uint256"},{"internalType":"uint256","name":"rewardPerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"masons","outputs":[{"internalType":"uint256","name":"lastSnapshotIndex","type":"uint256"},{"internalType":"uint256","name":"rewardEarned","type":"uint256"},{"internalType":"uint256","name":"epochTimerStart","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nextEpochPoint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"operator","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardLockupEpochs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardPerShare","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_withdrawLockupEpochs","type":"uint256"},{"internalType":"uint256","name":"_rewardLockupEpochs","type":"uint256"}],"name":"setLockUp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_operator","type":"address"}],"name":"setOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"share","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"tomb","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"treasury","outputs":[{"internalType":"contract ITreasury","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawLockupEpochs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
@@ -73,14 +79,16 @@ async function ClaimAndDeposit(status=[false,false]) {
 		// check reward exists
 		const pendingTOMB = await MasonryContract.earned(myWallet);
 		const anyRewards = await pendingTOMB.gt(0);
-		if (status[0]) {
+		var claimed = false;
+		if (status[0] && anyRewards) {
 			console.log("can claim from masonry: "+await ethers.utils.formatUnits(pendingTOMB,18)+" TOMB");
 			await MasonryContract.claimReward();
 			await sleep(3000);
 			console.log(">> claimed: "+await ethers.utils.formatUnits(pendingTOMB,18)+" TOMB" );
+			claimed = true;
 		}
 		// check rewards claimable and any exists
-		if (status[0] || anyRewards) {
+		if (status[0] && claimed) {
 		// if (status[0]) {
 			const walBal = await ShareTokenContract.balanceOf(myWallet);
 			var depAmt = await ethers.BigNumber.from(walBal);
@@ -133,6 +141,29 @@ async function redeemBonds() {
 	if (targetBN.gte(redeemPrice) && bondBalBN.gt(0) ) {
 		await BondContract.redeemBonds(_bondAmount, targetPrice, options);
 		console.log(">> redeemed: " + ethers.utils.formatUnits(_bondAmount,18) + " TBOND" );
+	}
+}
+
+// SBS TBOND to TSHARE swapper
+async function swapShares() {
+	var SbsEmpty = true;
+	try {
+		const SbsBal = await ShareTokenContract.balanceOf(SbsAddress);
+		await sleep(1000);
+		// console.log(await ethers.utils.formatUnits(SbsBal,18) +" TSHARE in SBS wallet");
+		if (SbsBal > 1e15) {		// 0.0001 threshold
+			SbsEmpty = false;
+			console.log(await ethers.utils.formatUnits(SbsBal,18) + " TSHARE available in SBS swapper!!!");
+			const tb_amt = await SbsContract.getTBondBalance(myWallet);
+			const ts_amt = await SbsContract.estimateAmountOfTShare(tb_amt);
+			if (ts_amt > 1e15) {	// 0.0001 threshold
+				await SbsContract.swapTBondToTShare(tb_amt);
+				console.log(">> swapped TBond to TShare in SBS");	// need to call withdrawTShare?
+			}
+		}
+	}
+	catch(err) {
+		console.log(err);
 	}
 }
 
@@ -195,8 +226,11 @@ async function claimLpReward(contract=BooLpContract, _pid=NaN, _amount=0, token=
 
 //////////////////////////////////// main function /////////////////////////////////////////////////////////////////////
 async function main() {
+	const one = await BondContract.tombPriceOne();
+	const oneBN = await ethers.BigNumber.from(one);
 	// main loop
 	while(true) {
+		swapShares();
 		// scan/claim LP pools
 		for (idx in tokens) {
 			// find LPs with claimable balances
@@ -238,29 +272,31 @@ async function main() {
 			}
 			// check pit open
 			// console.log("checking pit open (TBOND)...");
-			var tombPrice = await BondContract.getTombPrice();
+			// var tombPrice = await BondContract.getTombPrice();
 			// console.log("TOMB TWAP = "+ ethers.utils.formatUnits(tombPrice,18) +" FTM");
 			var redeemed = false;
 			for (sec=0; sec<60; sec++) {
 				var tombPrice = await BondContract.getTombPrice();
 				var tombPriceBN = await ethers.BigNumber.from(tombPrice);
 				sleep(500);
-				const oneBN = ethers.BigNumber.from(await BondContract.tombPriceOne() );
+				// const oneBN = await ethers.BigNumber.from(await BondContract.tombPriceOne() );
 				if (tombPriceBN.lt(oneBN) ) {
 					var _tombAmount = await TombContract.balanceOf(myWallet);
 					var tombBalBN = await ethers.BigNumber.from(_tombAmount);
 					if (tombBalBN.gt(minAmount) ) {
 						if (redeemed == false) {
 							await buyBonds();
-							await sleep(500);
 							redeemed = true;
 						}
+						await sleep(500);
 					}
 
 				} else if (tombPriceBN.gte(redeemPrice) ) {
 					// console.log("TOMB TWAP >= "+ ethers.utils.formatUnits(tombPrice,18) +" FTM");
 					await redeemBonds();
 				}
+				// check SBS TBOND <> TSHARE swapper
+				swapShares();
 				await sleep(500);
 			}
 			// await sleep(60000);		// wait 1 min
