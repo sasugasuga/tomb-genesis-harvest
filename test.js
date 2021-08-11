@@ -138,9 +138,14 @@ async function redeemBonds() {
 	const _bondAmount = await BondTokenContract.balanceOf(myWallet);
 	const bondBalBN = await ethers.BigNumber.from(_bondAmount);
 	await sleep(1000);
-	if (targetBN.gte(redeemPrice) && bondBalBN.gt(0) ) {
-		await BondContract.redeemBonds(_bondAmount, targetPrice, options);
-		console.log(">> redeemed: " + ethers.utils.formatUnits(_bondAmount,18) + " TBOND" );
+	try {
+		if (targetBN.gte(redeemPrice) && bondBalBN.gt(0) ) {
+			await BondContract.redeemBonds(_bondAmount, targetPrice, options);
+			console.log(">> redeemed: " + ethers.utils.formatUnits(_bondAmount,18) + " TBOND" );
+		}
+	}
+	catch (err) {
+		console.log(err);
 	}
 }
 
@@ -152,7 +157,6 @@ async function swapShares() {
 		await sleep(1000);
 		// console.log(await ethers.utils.formatUnits(SbsBal,18) +" TSHARE in SBS wallet");
 		if (SbsBal > 1e15) {		// 0.0001 threshold
-			SbsEmpty = false;
 			console.log(await ethers.utils.formatUnits(SbsBal,18) + " TSHARE available in SBS swapper!!!");
 			const tb_amt = await SbsContract.getTBondBalance(myWallet);
 			const ts_amt = await SbsContract.estimateAmountOfTShare(tb_amt);
@@ -230,7 +234,7 @@ async function main() {
 	const oneBN = await ethers.BigNumber.from(one);
 	// main loop
 	while(true) {
-		swapShares();
+		// swapShares();
 		// scan/claim LP pools
 		for (idx in tokens) {
 			// find LPs with claimable balances
