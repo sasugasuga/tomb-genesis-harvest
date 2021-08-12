@@ -279,10 +279,10 @@ async function main() {
 			// var tombPrice = await BondContract.getTombPrice();
 			// console.log("TOMB TWAP = "+ ethers.utils.formatUnits(tombPrice,18) +" FTM");
 			var redeemed = false;
-			for (sec=0; sec<60; sec++) {
+			for (tensec=0; tensec<6; tensec++) {
 				var tombPrice = await BondContract.getTombPrice();
 				var tombPriceBN = await ethers.BigNumber.from(tombPrice);
-				sleep(500);
+				sleep(5000);
 				// const oneBN = await ethers.BigNumber.from(await BondContract.tombPriceOne() );
 				if (tombPriceBN.lt(oneBN) ) {
 					var _tombAmount = await TombContract.balanceOf(myWallet);
@@ -292,7 +292,7 @@ async function main() {
 							await buyBonds();
 							redeemed = true;
 						}
-						await sleep(500);
+						await sleep(5000);
 					}
 
 				} else if (tombPriceBN.gte(redeemPrice) ) {
@@ -301,7 +301,7 @@ async function main() {
 				}
 				// check SBS TBOND <> TSHARE swapper
 				swapShares();
-				await sleep(500);
+				await sleep(5000);
 			}
 			// await sleep(60000);		// wait 1 min
 		}
