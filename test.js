@@ -159,9 +159,13 @@ async function swapShares() {
 		if (SbsBal > 1e15) {		// 0.0001 threshold
 			console.log(await ethers.utils.formatUnits(SbsBal,18) + " TSHARE available in SBS swapper!!!");
 			const tb_amt = await SbsContract.getTBondBalance(myWallet);
+			await sleep(5000);
 			const ts_amt = await SbsContract.estimateAmountOfTShare(tb_amt);
-			if (ts_amt > 1e15) {	// 0.0001 threshold
+			await sleep(5000);
+			const ts_amtBN = await ethers.BigNumber.from(ts_amt);
+			if (tb_amt>0 && ts_amtBN.gt(0)) {
 				await SbsContract.swapTBondToTShare(tb_amt);
+				await sleep(10000);
 				console.log(">> swapped TBond to TShare in SBS");	// need to call withdrawTShare?
 			}
 		}
