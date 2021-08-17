@@ -52,6 +52,7 @@ const SbsAddress = '0x2942168Fa8A39d070cB1173a54479F7C6A94604d';
 const SbsAbi = [{"inputs":[{"internalType":"address","name":"_tomb","type":"address"},{"internalType":"address","name":"_tbond","type":"address"},{"internalType":"address","name":"_tshare","type":"address"},{"internalType":"address","name":"_wftmAddress","type":"address"},{"internalType":"address","name":"_tombSpookyLpPair","type":"address"},{"internalType":"address","name":"_tshareSpookyLpPair","type":"address"},{"internalType":"address","name":"_daoAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOperator","type":"address"},{"indexed":true,"internalType":"address","name":"newOperator","type":"address"}],"name":"OperatorTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"tbondAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"tshareAmount","type":"uint256"}],"name":"TBondSwapPerformed","type":"event"},{"inputs":[],"name":"daoAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_tbondAmount","type":"uint256"}],"name":"estimateAmountOfTShare","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getTBondBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTShareAmountPerTomb","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTShareBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTSharePrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTombPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isOperator","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"operator","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_tbondAmount","type":"uint256"}],"name":"swapTBondToTShare","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"tbond","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tomb","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tombSpookyLpPair","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOperator_","type":"address"}],"name":"transferOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"tshare","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tshareSpookyLpPair","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"wftmAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdrawTShare","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 const SbsContract = new ethers.Contract(SbsAddress, SbsAbi, signer);
 
+const MinSbs = ethers.utils.parseEther("0.0001");
 
 // Masonry
 const MasonryAddress = '0x8764DE60236C5843D9faEB1B638fbCE962773B67';
@@ -151,22 +152,23 @@ async function redeemBonds() {
 
 // SBS TBOND to TSHARE swapper
 async function swapShares() {
-	var SbsEmpty = true;
 	try {
 		const SbsBal = await ShareTokenContract.balanceOf(SbsAddress);
+		const SbsBalBN = await ethers.BigNumber.from(SbsBal);
 		await sleep(1000);
 		// console.log(await ethers.utils.formatUnits(SbsBal,18) +" TSHARE in SBS wallet");
-		if (SbsBal > 1e15) {		// 0.0001 threshold
+		if (SbsBalBN.gt(MinSbs) ) {		// 0.0001 threshold
 			console.log(await ethers.utils.formatUnits(SbsBal,18) + " TSHARE available in SBS swapper!!!");
 			const tb_amt = await SbsContract.getTBondBalance(myWallet);
-			await sleep(5000);
+			const tb_amtBN = await ethers.BigNumber.from(tb_amt);
+			await sleep(3000);
 			const ts_amt = await SbsContract.estimateAmountOfTShare(tb_amt);
-			await sleep(5000);
+			await sleep(3000);
 			const ts_amtBN = await ethers.BigNumber.from(ts_amt);
-			if (tb_amt>0 && ts_amtBN.gt(0)) {
-				await SbsContract.swapTBondToTShare(tb_amt);
-				await sleep(10000);
-				console.log(">> swapped TBond to TShare in SBS");	// need to call withdrawTShare?
+			if (tb_amtBN.gt(0) && ts_amtBN.gt(0)) {
+				await SbsContract.swapTBondToTShare(tb_amtBN, options);
+				await sleep(5000);
+				console.log(">> swapped TBond to TShare in SBS");
 			}
 		}
 	}
